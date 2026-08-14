@@ -1,0 +1,25 @@
+#Dépendances Node.js
+node_modules/
+
+#Variables d'environnement
+.env
+.env.local
+
+#fichier de logs
+*.log
+npm-debug.log*
+
+#Fichiers générés
+dist/
+build/
+
+#Couverture des tests
+coverage/
+
+#Fichiers système
+.DS_Store
+Thum.de
+
+#Configuration des éditeurs
+.vscode/
+.idea/
