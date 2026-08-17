@@ -14,13 +14,27 @@ const creerNaissance = async (req, res) =>{
             message:"Naissance enregistrée avec succès",
             naissance
         });
-    }catch(error){
-        console.error(error);
-        res.status(500).json({
-            message:"Erreur lors de l'enregistrement",
-            error: error.message
+    }catch (error) {
+        //gestion des doublons
+        if(error.code === 11000){
+            //409 signifie que la requête est correcte mais qu'elle entre en conflit avec une donnée existante
+            return res.status(409).json({
+                message:"Un acte de naissance avec ce numéro existe déjà"
+            });
+        }
+        // Gestion des erreurs de validation
+    if (error.name === "ValidationError") {
+        return res.status(400).json({
+            message: "Données invalides",
+            erreurs: Object.values(error.errors).map(err => err.message)
         });
     }
+
+    res.status(500).json({
+        message: "Erreur interne du serveur",
+        error: error.message
+    });
+}
 };
 
 //Récupérer toutes les naissances
@@ -106,11 +120,39 @@ const supprimerNAissance = async (req, res) =>{
             error: error.message
         });
     }
-}
+};
+
+const rechercherParNumeroActe = async (req, res) => {
+    try {
+        const naissance =
+            await naissanceService.rechercherParNumeroActe(
+                req.params.numeroActe
+            );
+
+        if (!naissance) {
+            return res.status(404).json({
+                message: "Aucune naissance trouvée avec ce numéro d'acte"
+            });
+        }
+
+        res.status(200).json({
+            naissance
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Erreur lors de la recherche",
+            error: error.message
+        });
+    }
+};
 
 
 module.exports = {creerNaissance, obtenirToutesLesNaissances,
     obtenirNaissanceParId,
     modifierNaissance,
-    supprimerNAissance
+    supprimerNAissance,
+    rechercherParNumeroActe
 };

@@ -29,12 +29,18 @@ const modifierNaissance = async (id, donnees) =>{
 //Supprimer la naissance
 const supprimerNAissance = async (id) =>{
     return await Naissance.findByIdAndDelete(id)
-}
+};
+
+//Rechercher la naissance par numéro d'acte
+const rechercherParNUmeroActe = async (numeroActe) =>{
+    return await Naissance.findOne({numeroActe});
+};
 
 module.exports = {
     creerNaissance,
     obtenirToutesLesNaissances,
     obtenirNaissanceParId,
     modifierNaissance,
-    supprimerNAissance
+    supprimerNAissance,
+    rechercherParNUmeroActe
 };

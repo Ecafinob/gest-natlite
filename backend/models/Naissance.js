@@ -4,41 +4,41 @@ const naissanceSchema = new mongoose.Schema(
     {
         nomEnfant:{
             type:String,
-            require:true,
+            required:[true,"Le nom de l'enfant est obligatoire"],
             trim:true
         },
         prenomEnfant:{
             type:String,
-            require:true,
+            required:[true, "Le prénom de l'enfant est obligatoire"],
             trim:true
         },
         sexe:{
             type:String,
-            require:true,
+            required:[true, "Le saxe de l'enfant est obligatoire"],
             trim:true
         },
         dateNaissance:{
             type:Date,
-            require:true
+            required:[true, "La date de naissance est obligatoire"]
         },
         lieuNaissance:{
             type:String,
-            require:true,
+            required:[true, "Le lieu de naissance est obligatoire"],
             trim:true
         },
         nomPere:{
             type:String,
-            require:true,
+            required:[true, "Le nom du père est obligatoire"],
             trim:true
         },
         nomMere:{
             type:String,
-            require:true,
+            required:[true, "Le nom de la mère est obligatoire"],
             trim:true
         },
         numeroActe:{
             type:String,
-            require:true,
+            required:[true, "Le numéro d'acte est obligatoire"],
             unique:true,
             trim:true
         }

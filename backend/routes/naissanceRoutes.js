@@ -5,7 +5,8 @@ const {creerNaissance,
     obtenirToutesLesNaissances,
     obtenirNaissanceParId,
     modifierNaissance,
-    supprimerNAissance
+    supprimerNAissance,
+    rechercherParNumeroActe
 } = require("../controllers/naissanceController");
 
 //POST-enregistrer une naissance
@@ -13,6 +14,9 @@ router.post("/", creerNaissance);
 
 //GET- Toutes les naissances
 router.get("/", obtenirToutesLesNaissances);
+
+//recherche par acte
+router.get("/numero-acte/:numeroActe", rechercherParNumeroActe);
 
 //GET- une naissance par id
 router.get("/:id", obtenirNaissanceParId);
@@ -22,6 +26,8 @@ router.put("/:id", modifierNaissance);
 
 //DELETE- supprimer la naissance
 router.delete("/:id", supprimerNAissance);
+
+
 module.exports = router;
 
 
