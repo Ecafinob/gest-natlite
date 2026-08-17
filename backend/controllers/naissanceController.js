@@ -1,5 +1,6 @@
 const naissanceService = require("../services/naissanceService");
 const generateNumeroActe = require("../utils/generateNumeroActe");
+const mongoose = require("mongoose");
 
 const creerNaissance = async (req, res) =>{
     try{
@@ -40,16 +41,20 @@ const creerNaissance = async (req, res) =>{
 //Récupérer toutes les naissances
 const obtenirToutesLesNaissances = async (req, res) =>{
     try{
-        const naissances = await naissanceService.obtenirToutesLesNaissances();
-        res.status(200).json({
-            nombre: naissances.length,
-            naissances
-        });
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const recherche = req.query.recherche || "" ;
+      const resultat = await naissanceService.obtenirToutesLesNaissances(
+        page,
+        limit,
+        recherche
+      );
+      res.status(200).json(resultat);
     }catch(error){
         console.error(error);
+
         res.status(500).json({
             message:"Erreur lors de la récupération des naissances",
-            error: error.message
         })
     }
 };
@@ -58,7 +63,7 @@ const obtenirToutesLesNaissances = async (req, res) =>{
 const obtenirNaissanceParId =async (req, res) =>{
     try{
         const naissance = await naissanceService.obtenirNaissanceParId(req.params.id);
-        if(!naissance){
+        if (!naissance){
             return res.status(404).json({
                 message:"Naissance introuvable"
             });
@@ -81,31 +86,59 @@ const modifierNaissance = async (req, res) =>{
         const naissance = await naissanceService.modifierNaissance(req.params.id,
             req.body
         );
-        if(!naissance){
-            res.staus(404).json({
+        if (!naissance){
+           return res.status(404).json({
                 message:"Naissance introuvable"
             });
         }
         res.status(200).json({
             message:"Naissance modifiée avec succès",
             naissance
-        });    
+        });   
+
     }catch(error){
-        console.error(error);
-        res.status(500).json({
-            message:"Erreur lors de la modification",
-            error: error.message
+       // gestion des doublons 
+       if (error.code === 11000){
+        return res.status(409).json({
+            message: "Un acte de naissance avec ce numéro existe déjà"
         });
+       }
+       //gestion des erreurs de validation
+       if (error.name === "ValidationError") {
+        return res.status(400).json({
+            message:"Données invalides",
+            erreurs: Object.values(error.errors).map(err => err.message)
+        });
+       }
+
+       //ID MongoDB invalide
+       if (error.name === "CastError") {
+           return res.status(400).json({
+            message: "identifiant de naissance invalide"
+           });
+       }
+
+       //Autre erreurs
+       console;log(error);
+       res.status(500).json({
+        message: "Erreur interne du serveur"
+       });
     }
 };
 
 //Supprimer les naissance
 const supprimerNAissance = async (req, res) =>{
     try{
+        // vérifier si l'ID est un objectid MongoDB
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)){
+            return res.status(400).json({
+                message: "Identifiant de naissance invalide"
+            });
+        }
         const naissance = await naissanceService.supprimerNAissance(req.params.id);
         
         if(!naissance){
-            res.status(404).json({
+            return res.status(404).json({
                 message:"Naissance introuvable"
             });
         }
@@ -114,10 +147,11 @@ const supprimerNAissance = async (req, res) =>{
             naissance
         });
     }catch(error){
+
         console.error(error);
+
         res.status(500).json({
-            message:"Erreur lors de la suppression",
-            error: error.message
+            message:"Erreur interne au serveur"
         });
     }
 };

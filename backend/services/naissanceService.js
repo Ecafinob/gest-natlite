@@ -7,9 +7,41 @@ const creerNaissance = async (donnees) => {
     return await naissance.save();
 };
 //obetenir toute les naissnces
-const obtenirToutesLesNaissances = async () =>{
-    return await Naissance.find().sort({createAt: -1});
-};
+const obtenirToutesLesNaissances = async (
+    page = 1,
+    limit = 10,
+    recherche = ""
+) =>{
+    const skip = (page - 1) * limit;
+
+    const filtre = {};
+   
+    if (recherche) {
+        filtre.$or = [ 
+        {nomEnfant: {$regex: recherche, $options: "i"} },
+        {prenomEnfant:{$regex: recherche, $options:"i"} },
+        {nomPere: {$regex: recherche, $options: "i"}},
+        {nomMere: {$regex: recherche, $options: "i"}},
+        {lieuNaissance: {$regex: recherche, $options: "i"}},
+        {numeroActe: {$regex: recherche, $options: "i"}}
+
+        ];
+    }
+
+    const naissances = await Naissance.find(filtre)
+    .sort({createdAt: -1})
+    .skip(skip)
+    .limit(limit);
+
+    const total =await Naissance.countDocuments(filtre);
+    return {
+        naissances,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+    };
+}
 //obtenir la naissance par l'id
 const obtenirNaissanceParId = async (id) =>{
     return await Naissance.findById(id);
