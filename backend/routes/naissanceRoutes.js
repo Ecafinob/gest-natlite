@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+const authentifierUtilisateur = require("../middleware/authMiddleware");
 const {creerNaissance,
     obtenirToutesLesNaissances,
     obtenirNaissanceParId,
@@ -8,24 +9,25 @@ const {creerNaissance,
     supprimerNAissance,
     rechercherParNumeroActe
 } = require("../controllers/naissanceController");
+const autoriserRole = require("../middleware/roleMiddleware");
 
 //POST-enregistrer une naissance
-router.post("/", creerNaissance);
+router.post("/", authentifierUtilisateur, autoriserRole("admin", "agent"), creerNaissance);
 
-//GET- Toutes les naissances
+//GET- Toutes les naissances (route de consultation)
 router.get("/", obtenirToutesLesNaissances);
 
-//recherche par acte
+//recherche par acte (route de consultation)
 router.get("/numero-acte/:numeroActe", rechercherParNumeroActe);
 
-//GET- une naissance par id
+//GET- une naissance par id (route de consultation)
 router.get("/:id", obtenirNaissanceParId);
 
 //PUT- Modifier la naissance
-router.put("/:id", modifierNaissance);
+router.put("/:id", authentifierUtilisateur, autoriserRole("admin"), modifierNaissance);
 
 //DELETE- supprimer la naissance
-router.delete("/:id", supprimerNAissance);
+router.delete("/:id", authentifierUtilisateur, autoriserRole("admin"), supprimerNAissance);
 
 
 module.exports = router;
