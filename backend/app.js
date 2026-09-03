@@ -11,11 +11,11 @@ app.use(cors());
 app.use(express.json());
 
 // Routes des naissances
-app.use("/api/naissances", naissanceRoutes);
+app.use("/naissances", naissanceRoutes);
 //Routes des authentifications
-app.use("/api/auth/", authRoutes);
+app.use("/auth/", authRoutes);
 //route des utilisateurs
-app.use("/api/utilisateurs", utilisateurRoutes);
+app.use("/utilisateurs", utilisateurRoutes);
 
 app.get("/", (req, res) => {
     res.json({

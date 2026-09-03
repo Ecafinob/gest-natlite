@@ -7,7 +7,10 @@ const autoriserRole = require("../middleware/roleMiddleware");
 
 const {
     creerUtilisateur,
-    obtenirTousLesUtilisateurs
+    obtenirTousLesUtilisateurs,
+    obtenirUtilisateurParId,
+    modifierUtilisateur,
+    supprimerUtilisateur
 } = require("../controllers/utilisateurController");
 
 // POST - Créer un utilisateur
@@ -25,6 +28,33 @@ router.get(
     "/",
     authentifierUtilisateur,
     autoriserRole("admin"),
-    obtenirTousLesUtilisateurs
+    obtenirTousLesUtilisateurs);
+
+    // GET - Utilisateur par ID
+// Admin uniquement
+router.get(
+    "/:id",
+    authentifierUtilisateur,
+    autoriserRole("admin"),
+    obtenirUtilisateurParId
 );
+
+// PUT - Modifier un utilisateur
+// Admin uniquement
+router.put(
+    "/:id",
+    authentifierUtilisateur,
+    autoriserRole("admin"),
+    modifierUtilisateur
+);
+
+// DELETE - Supprimer un utilisateur
+// Admin uniquement
+router.delete(
+    "/:id",
+    authentifierUtilisateur,
+    autoriserRole("admin"),
+    supprimerUtilisateur
+);
+
 module.exports = router;
