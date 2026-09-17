@@ -13,7 +13,7 @@ const creerAdmin = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         console.log("MongoDB connecté");
 
-        const email = "admin@getMaxListeners.com";
+        const email = "admin@getmaxlisteners.com";
         const motDePasse = "Admin123";
         
         //Vérifier si l'admin existe déjà

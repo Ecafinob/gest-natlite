@@ -5,17 +5,18 @@ const Utilisateur = require("../models/Utilisateur");
 // Inscription
 const register = async (req, res) => {
     try {
-        const { nom, email, motDePasse } = req.body;
+        const { nom, motDePasse } = req.body;
+        const emailNormalise = req.body.email?.trim().toLowerCase();
 
         // Vérifier les champs obligatoires
-        if (!nom || !email || !motDePasse) {
+        if (!nom || !emailNormalise || !motDePasse) {
             return res.status(400).json({
                 message: "Le nom, l'email et le mot de passe sont obligatoires"
             });
         }
 
         // Vérifier si l'utilisateur existe déjà
-        const utilisateurExiste = await Utilisateur.findOne({ email });
+        const utilisateurExiste = await Utilisateur.findOne({ email: emailNormalise });
 
         if (utilisateurExiste) {
             return res.status(409).json({
@@ -29,7 +30,7 @@ const register = async (req, res) => {
         // Créer l'utilisateur
         const utilisateur = await Utilisateur.create({
             nom,
-            email,
+            email: emailNormalise,
             motDePasse: motDePasseHash
         });
 
@@ -56,17 +57,18 @@ const register = async (req, res) => {
 // Connexion
 const login = async (req, res) => {
     try {
-        const { email, motDePasse } = req.body;
+        const emailNormalise = req.body.email?.trim().toLowerCase();
+        const { motDePasse } = req.body;
 
         // Vérifier les champs
-        if (!email || !motDePasse) {
+        if (!emailNormalise || !motDePasse) {
             return res.status(400).json({
                 message: "L'email et le mot de passe sont obligatoires"
             });
         }
 
         // Rechercher l'utilisateur
-        const utilisateur = await Utilisateur.findOne({ email });
+        const utilisateur = await Utilisateur.findOne({ email: emailNormalise });
 
         if (!utilisateur) {
             return res.status(401).json({
@@ -92,7 +94,7 @@ const login = async (req, res) => {
                 id: utilisateur._id,
                 role: utilisateur.role
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET?.trim(),
             {
                 expiresIn: "1h"
             }

@@ -20,7 +20,7 @@ const authentifierUtilisateur = (req, res, next) => {
 
         const utilisateur = jwt.verify(
             token,
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET?.trim()
         );
         console.log("utilisateur authentifié:", utilisateur)
         req.utilisateur = utilisateur;

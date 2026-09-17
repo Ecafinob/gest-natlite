@@ -149,14 +149,43 @@ async function loadUsers() {
   } catch (error) { showError(error); }
 }
 
-async function addUser() {
-  const nom = window.prompt('Nom complet du nouvel utilisateur :');
-  if (!nom) return;
-  const email = window.prompt('Adresse email :');
-  const motDePasse = window.prompt('Mot de passe temporaire :');
-  if (!email || !motDePasse) return;
-  const role = window.prompt('Rôle (agent ou admin) :', 'agent') || 'agent';
-  try { await api('/utilisateurs', { method: 'POST', body: JSON.stringify({ nom, email, motDePasse, role }) }); showToast('Utilisateur créé.'); loadUsers(); } catch (error) { showError(error); }
+function addUser() {
+  const modal = $('#user-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  $('#user-form input[name="nom"]').focus();
+}
+
+function closeUserModal() {
+  const modal = $('#user-modal');
+  if (!modal) return;
+  modal.classList.add('hidden');
+  $('#user-form').reset();
+}
+
+function openHelp() {
+  $('#help-modal')?.classList.remove('hidden');
+}
+
+function closeHelp() {
+  $('#help-modal')?.classList.add('hidden');
+}
+
+async function submitUser(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const submitButton = form.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  try {
+    await api('/utilisateurs', { method: 'POST', body: JSON.stringify(Object.fromEntries(new FormData(form).entries())) });
+    closeUserModal();
+    showToast('Utilisateur créé avec succès.');
+    loadUsers();
+  } catch (error) {
+    showError(error);
+  } finally {
+    submitButton.disabled = false;
+  }
 }
 
 async function deleteUser(id) {
@@ -180,8 +209,17 @@ document.addEventListener('click', event => {
   if (viewButton) { state.editingId = null; renderView(viewButton.dataset.view); $('#app-screen .sidebar')?.classList.remove('open'); return; }
   const action = event.target.closest('[data-action]');
   if (!action) return;
-  const actions = { logout, refresh: () => renderView(state.view), 'open-sidebar': () => $('.sidebar').classList.add('open'), 'close-sidebar': () => $('.sidebar').classList.remove('open'), 'load-records': () => loadRecords(), 'new-user': addUser, export: exportRecords, 'edit-record': () => editRecord(action.dataset.id), 'delete-record': () => deleteRecord(action.dataset.id), 'delete-user': () => deleteUser(action.dataset.id), page: () => loadRecords(Number(action.dataset.page)) };
+  const actions = { logout, refresh: () => renderView(state.view), 'open-sidebar': () => $('.sidebar').classList.add('open'), 'close-sidebar': () => $('.sidebar').classList.remove('open'), 'load-records': () => loadRecords(), 'new-user': addUser, 'close-user-modal': closeUserModal, 'open-help': openHelp, 'close-help': closeHelp, export: exportRecords, 'edit-record': () => editRecord(action.dataset.id), 'delete-record': () => deleteRecord(action.dataset.id), 'delete-user': () => deleteUser(action.dataset.id), page: () => loadRecords(Number(action.dataset.page)) };
   actions[action.dataset.action]?.();
+});
+
+document.addEventListener('submit', event => {
+  if (event.target.id === 'user-form') submitUser(event);
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !$('#user-modal')?.classList.contains('hidden')) closeUserModal();
+  if (event.key === 'Escape' && !$('#help-modal')?.classList.contains('hidden')) closeHelp();
 });
 
 document.addEventListener('input', event => {
