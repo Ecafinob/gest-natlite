@@ -64,8 +64,25 @@ const supprimerNAissance = async (id) =>{
 };
 
 //Rechercher la naissance par numéro d'acte
-const rechercherParNUmeroActe = async (numeroActe) =>{
+const rechercherParNumeroActe = async (numeroActe) =>{
     return await Naissance.findOne({numeroActe});
+};
+
+const obtenirStatistiques = async () => {
+    const [total, parSexe, parLieu] = await Promise.all([
+        Naissance.countDocuments(),
+        Naissance.aggregate([
+            { $group: { _id: "$sexe", total: { $sum: 1 } } },
+            { $sort: { total: -1 } }
+        ]),
+        Naissance.aggregate([
+            { $group: { _id: "$lieuNaissance", total: { $sum: 1 } } },
+            { $sort: { total: -1 } },
+            { $limit: 5 }
+        ])
+    ]);
+
+    return { total, parSexe, parLieu };
 };
 
 module.exports = {
@@ -74,5 +91,6 @@ module.exports = {
     obtenirNaissanceParId,
     modifierNaissance,
     supprimerNAissance,
-    rechercherParNUmeroActe
+    rechercherParNumeroActe,
+    obtenirStatistiques
 };

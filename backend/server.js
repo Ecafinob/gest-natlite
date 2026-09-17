@@ -10,7 +10,7 @@ const connectDB = require("./config/db");
 const PORT = process.env.PORT || 5000;
 // console.log(process.env.MONGO_URI)
 //connexion à mongodb
-connectDB();
+connectDB().catch(() => process.exit(1));
 
 app.listen(PORT, () =>{
     console.log(`Serveur démarré sur le port ${PORT}`)

@@ -119,7 +119,7 @@ const modifierNaissance = async (req, res) =>{
        }
 
        //Autre erreurs
-       console;log(error);
+    console.error(error);
        res.status(500).json({
         message: "Erreur interne du serveur"
        });
@@ -183,10 +183,20 @@ const rechercherParNumeroActe = async (req, res) => {
     }
 };
 
+const obtenirStatistiques = async (req, res) => {
+    try {
+        const statistiques = await naissanceService.obtenirStatistiques();
+        res.status(200).json(statistiques);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erreur lors du calcul des statistiques" });
+    }
+};
 
 module.exports = {creerNaissance, obtenirToutesLesNaissances,
     obtenirNaissanceParId,
     modifierNaissance,
     supprimerNAissance,
-    rechercherParNumeroActe
+    rechercherParNumeroActe,
+    obtenirStatistiques
 };

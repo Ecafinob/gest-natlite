@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const naissanceRoutes = require("./routes/naissanceRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 // Routes des naissances
 app.use("/naissances", naissanceRoutes);

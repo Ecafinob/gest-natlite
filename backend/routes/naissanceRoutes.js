@@ -7,7 +7,8 @@ const {creerNaissance,
     obtenirNaissanceParId,
     modifierNaissance,
     supprimerNAissance,
-    rechercherParNumeroActe
+    rechercherParNumeroActe,
+    obtenirStatistiques
 } = require("../controllers/naissanceController");
 const autoriserRole = require("../middleware/roleMiddleware");
 
@@ -15,13 +16,15 @@ const autoriserRole = require("../middleware/roleMiddleware");
 router.post("/", authentifierUtilisateur, autoriserRole("admin", "agent"), creerNaissance);
 
 //GET- Toutes les naissances (route de consultation)
-router.get("/", obtenirToutesLesNaissances);
+router.get("/", authentifierUtilisateur, obtenirToutesLesNaissances);
+
+router.get("/statistiques", authentifierUtilisateur, obtenirStatistiques);
 
 //recherche par acte (route de consultation)
-router.get("/numero-acte/:numeroActe", rechercherParNumeroActe);
+router.get("/numero-acte/:numeroActe", authentifierUtilisateur, rechercherParNumeroActe);
 
 //GET- une naissance par id (route de consultation)
-router.get("/:id", obtenirNaissanceParId);
+router.get("/:id", authentifierUtilisateur, obtenirNaissanceParId);
 
 //PUT- Modifier la naissance
 router.put("/:id", authentifierUtilisateur, autoriserRole("admin"), modifierNaissance);
