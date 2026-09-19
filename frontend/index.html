@@ -15,7 +15,10 @@
   <div id="toast" class="toast" role="status"></div>
   <section id="auth-screen" class="auth-screen">
     <div class="auth-art">
-      <div class="brand brand-light"><span class="brand-mark">N</span><span>Natalis</span></div>
+      <div class="brand brand-light">
+        <span class="brand-mark">N</span>
+        <span>Natalis</span>
+      </div>
       <div class="auth-art-copy">
         <p class="eyebrow">Registre communal</p>
         <h1>Chaque naissance compte.</h1>
@@ -26,11 +29,19 @@
     <div class="auth-panel">
       <div class="auth-panel-inner">
         <div class="brand brand-dark"><span class="brand-mark">N</span><span>Natalis</span></div>
-        <div class="auth-heading"><p class="eyebrow">Bienvenue</p><h2>Ouvrir une session</h2><p>Connectez-vous à votre espace de travail.</p></div>
+        <div class="auth-heading">
+          <p class="eyebrow">Bienvenue</p>
+          <h2>Ouvrir une session</h2>
+          <p>Connectez-vous à votre espace de travail.</p>
+        </div>
         <form id="login-form" class="form-stack">
           <label>Email professionnel<input name="email" type="email" autocomplete="username" placeholder="nom@commune.fr" required></label>
-          <label>Mot de passe<div class="password-field"><input name="motDePasse" type="password" autocomplete="current-password" placeholder="Votre mot de passe" required><button class="icon-button" type="button" data-action="toggle-password" aria-label="Afficher le mot de passe">◉</button></div></label>
-          <button class="button button-primary button-wide" type="submit"><span>Accéder au registre</span><span>→</span></button>
+          <label>Mot de passe<div class="password-field"><input name="motDePasse" type="password" autocomplete="current-password" placeholder="Votre mot de passe" required>
+            <button class="icon-button" type="button" data-action="toggle-password" aria-label="Afficher le mot de passe">◉</button>
+          </div></label>
+          <button class="button button-primary button-wide" type="submit">
+            <span>Accéder au registre</span><span>→</span>
+          </button>
         </form>
         <p class="auth-note">Accès réservé aux agents habilités.</p>
       </div>
@@ -39,31 +50,339 @@
 
   <section id="app-screen" class="app-shell hidden">
     <aside class="sidebar">
-      <div class="sidebar-top"><div class="brand brand-light"><span class="brand-mark">N</span><span>Natalis</span></div><button class="icon-button sidebar-close" data-action="close-sidebar" aria-label="Fermer le menu">×</button></div>
-      <div class="sidebar-context"><span class="status-dot"></span><span>Registre actif</span></div>
+      <div class="sidebar-top">
+        <div class="brand brand-light">
+          <span class="brand-mark">N</span>
+          <span>Natalis</span>
+        </div>
+        <button class="icon-button sidebar-close" data-action="close-sidebar" aria-label="Fermer le menu">×</button>
+      </div>
+      <div class="sidebar-context">
+        <span class="status-dot"></span>
+        <span>Registre actif</span>
+      </div>
       <nav class="main-nav" aria-label="Navigation principale">
         <button class="nav-item active" data-view="dashboard"><span>⌂</span>Vue d'ensemble</button>
         <button class="nav-item" data-view="records"><span>▤</span>Registre des naissances</button>
         <button class="nav-item" data-view="new-record"><span>＋</span>Nouvel enregistrement</button>
         <button class="nav-item admin-only" data-view="users"><span>♙</span>Utilisateurs</button>
       </nav>
-      <div class="sidebar-bottom"><button class="help-box" data-action="open-help"><span class="help-icon">?</span><span><strong>Besoin d'aide ?</strong><small>Consulter le guide agent</small></span></button><button class="logout-button" data-action="logout"><span>↪</span> Se déconnecter</button></div>
+      <div class="sidebar-bottom">
+        <button class="help-box" data-action="open-help">
+          <span class="help-icon">?</span>
+          <span><strong>Besoin d'aide ?</strong><small>Consulter le guide agent</small></span>
+        </button>
+        <button class="logout-button" data-action="logout"><span>↪</span> Se déconnecter</button>
+      </div>
     </aside>
     <main class="main-content">
-      <header class="topbar"><button class="icon-button menu-toggle" data-action="open-sidebar" aria-label="Ouvrir le menu">☰</button><div class="breadcrumb"><span>Natalis</span><b>/</b><strong id="page-title">Vue d'ensemble</strong></div><div class="topbar-actions"><button class="icon-button" data-action="refresh" aria-label="Actualiser">↻</button><div class="profile"><div class="avatar" id="user-avatar">A</div><div><strong id="user-name">Administrateur</strong><small id="user-role">Administrateur</small></div><span>⌄</span></div></div></header>
+      <header class="topbar">
+        <button class="icon-button menu-toggle" data-action="open-sidebar" aria-label="Ouvrir le menu">☰</button>
+        <div class="breadcrumb">
+          <span>Natalis</span><b>/</b><strong id="page-title">Vue d'ensemble</strong>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" data-action="refresh" aria-label="Actualiser">↻</button>
+          <div class="profile">
+            <div class="avatar" id="user-avatar">A</div>
+            <div><strong id="user-name">Administrateur</strong><small id="user-role">Administrateur</small>
+            </div><span>⌄</span>
+          </div>
+        </div>
+      </header>
       <div id="view-container" class="view-container"></div>
     </main>
   </section>
 
-  <template id="dashboard-template"><div class="page-head reveal"><div><p class="eyebrow">Jeudi 17 septembre 2026</p><h1>Bonjour, <span id="welcome-name">Administrateur</span></h1><p class="muted">Voici l'état du registre de votre commune aujourd'hui.</p></div><button class="button button-primary" data-view="new-record"><span>＋</span> Enregistrer une naissance</button></div><div class="metric-grid reveal-delay"><article class="metric-card metric-featured"><div class="metric-icon">✦</div><div><span>Total des naissances</span><strong id="metric-total">—</strong><small>Depuis le début du registre</small></div><i>↗</i></article><article class="metric-card"><div class="metric-icon blue">◒</div><div><span>Filles</span><strong id="metric-girls">—</strong><small id="metric-girls-rate">—</small></div></article><article class="metric-card"><div class="metric-icon coral">◒</div><div><span>Garçons</span><strong id="metric-boys">—</strong><small id="metric-boys-rate">—</small></div></article><article class="metric-card"><div class="metric-icon gold">⌖</div><div><span>Communes actives</span><strong id="metric-places">—</strong><small>Top 5 lieux recensés</small></div></article></div><div class="dashboard-grid reveal-delay-2"><section class="panel chart-panel"><div class="panel-head"><div><p class="eyebrow">Répartition</p><h2>Naissances par sexe</h2></div><span class="period-label">Global</span></div><div class="donut-wrap"><div class="donut" id="sex-donut"><div><strong id="donut-total">—</strong><small>naissances</small></div></div><div class="legend"><span><i class="legend-dot blue"></i>Filles <b id="legend-girls">—</b></span><span><i class="legend-dot coral"></i>Garçons <b id="legend-boys">—</b></span></div></div></section><section class="panel activity-panel"><div class="panel-head"><div><p class="eyebrow">Accès rapide</p><h2>Actions fréquentes</h2></div></div><div class="quick-actions"><button data-view="new-record"><span class="quick-icon green">＋</span><span><strong>Nouvel acte</strong><small>Enregistrer une naissance</small></span><b>→</b></button><button data-view="records"><span class="quick-icon blue">⌕</span><span><strong>Rechercher</strong><small>Retrouver un dossier</small></span><b>→</b></button><button data-action="export"><span class="quick-icon gold">↓</span><span><strong>Exporter le registre</strong><small>Télécharger les données visibles</small></span><b>→</b></button></div></section></div><section class="panel table-panel reveal-delay-2"><div class="panel-head"><div><p class="eyebrow">Derniers enregistrements</p><h2>Activité récente</h2></div><button class="text-button" data-view="records">Voir le registre →</button></div><div class="table-scroll"><table><thead><tr><th>Numéro d'acte</th><th>Enfant</th><th>Date de naissance</th><th>Lieu</th><th>Sexe</th><th></th></tr></thead><tbody id="recent-records"></tbody></table></div></section></template>
+  <template id="dashboard-template">
+    <div class="page-head reveal">
+      <div>
+        <p class="eyebrow">Jeudi 17 septembre 2026</p>
+        <h1>Bonjour, <span id="welcome-name">Administrateur</span></h1>
+        <p class="muted">Voici l'état du registre de votre commune aujourd'hui.</p>
+      </div>
+      <button class="button button-primary" data-view="new-record"><span>＋</span> Enregistrer une naissance</button>
+    </div>
+    <div class="metric-grid reveal-delay">
+      <article class="metric-card metric-featured">
+        <div class="metric-icon">✦</div>
+        <div><span>Total des naissances</span><strong id="metric-total">—</strong><small>Depuis le début du registre</small>
+        </div><i>↗</i></article><article class="metric-card">
+          <div class="metric-icon blue">◒</div>
+          <div><span>Filles</span><strong id="metric-girls">—</strong><small id="metric-girls-rate">—</small>
+          </div></article><article class="metric-card">
+            <div class="metric-icon coral">◒</div>
+            <div><span>Garçons</span><strong id="metric-boys">—</strong><small id="metric-boys-rate">—</small>
+            </div></article><article class="metric-card">
+              <div class="metric-icon gold">⌖</div>
+              <div>
+                <span>Communes actives</span><strong id="metric-places">—</strong><small>Top 5 lieux recensés</small>
+              </div>
+            </article>
+          </div>
+          <div class="dashboard-grid reveal-delay-2">
+            
+            <section class="panel chart-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">Répartition</p>
+                  <h2>Naissances par sexe</h2>
+                </div>
+                <span class="period-label">Global</span>
+              </div><div class="donut-wrap">
+                <div class="donut" id="sex-donut">
+                  <div>
+                    <strong id="donut-total">—</strong><small>naissances</small>
+                  </div>
+                </div>
+                <div class="legend"><span><i class="legend-dot blue"></i>Filles <b id="legend-girls">—</b></span><span><i class="legend-dot coral"></i>Garçons <b id="legend-boys">—</b></span></div></div></section><section class="panel activity-panel">
+                  <div class="panel-head">
+                    <div><p class="eyebrow">Accès rapide</p><h2>Actions fréquentes</h2>
+                    </div>
+                  </div>
+                  <div class="quick-actions">
+                    <button data-view="new-record">
+                      <span class="quick-icon green">＋</span>
+                      <span>
+                        <strong>Nouvel acte</strong><small>Enregistrer une naissance</small>
+                      </span>
+                      <b>→</b>
+                    </button>
+                    <button data-view="records">
+                      <span class="quick-icon blue">⌕</span>
+                      <span><strong>Rechercher</strong><small>Retrouver un dossier</small></span>
+                      <b>→</b></button><button data-action="export">
+                        <span class="quick-icon gold">↓</span>
+                        <span><strong>Exporter le registre</strong><small>Télécharger les données visibles</small></span>
+                        <b>→</b>
+                      </button>
+                    </div>
+                  </section>
+                </div>
+                
+                <section class="panel table-panel reveal-delay-2">
+                  <div class="panel-head">
+                    <div>
+                      <p class="eyebrow">Derniers enregistrements</p>
+                      <h2>Activité récente</h2>
+                    </div>
+                    <button class="text-button" data-view="records">Voir le registre →</button>
+                  </div>
+                  <div class="table-scroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Numéro d'acte</th>
+                          <th>Enfant</th>
+                          <th>Date de naissance</th>
+                          <th>Lieu</th>
+                          <th>Sexe</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="recent-records"></tbody>
+                    </table>
+                  </div>
+                </section>
+              </template>
 
-  <template id="records-template"><div class="page-head reveal"><div><p class="eyebrow">Registre communal</p><h1>Naissances enregistrées</h1><p class="muted">Consultez et gérez l'ensemble des dossiers déclarés.</p></div><button class="button button-primary" data-view="new-record"><span>＋</span> Nouvel enregistrement</button></div><section class="panel records-panel reveal-delay"><div class="toolbar"><div class="search-field"><span>⌕</span><input id="record-search" type="search" placeholder="Rechercher par nom, acte, lieu..."></div><button class="filter-button" data-action="load-records">↻ Actualiser</button></div><div class="table-scroll"><table><thead><tr><th>Numéro d'acte</th><th>Enfant</th><th>Parents</th><th>Date & lieu</th><th>Sexe</th><th>Actions</th></tr></thead><tbody id="records-body"></tbody></table></div><div class="pagination" id="pagination"></div></section></template>
+  <template id="records-template">
+    <div class="page-head reveal">
+      <div>
+        <p class="eyebrow">Registre communal</p>
+        <h1>Naissances enregistrées</h1>
+        <p class="muted">Consultez et gérez l'ensemble des dossiers déclarés.</p>
+      </div>
+      <button class="button button-primary" data-view="new-record">
+        <span>＋</span> Nouvel enregistrement
+      </button>
+      </div><section class="panel records-panel reveal-delay">
+        <div class="toolbar">
+          <div class="search-field">
+            <span>⌕</span>
+            <input id="record-search" type="search" placeholder="Rechercher par nom, acte, lieu...">
+          </div>
+          <button class="filter-button" data-action="load-records">↻ Actualiser</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Numéro d'acte</th>
+                <th>Enfant</th>
+                <th>Parents</th>
+                <th>Date & lieu</th>
+                <th>Sexe</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="records-body"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination">
 
-  <template id="form-template"><div class="page-head reveal"><div><p class="eyebrow">Registre communal / Nouveau dossier</p><h1 id="form-title">Enregistrer une naissance</h1><p class="muted">Saisissez les informations avec soin. Le numéro d'acte sera généré automatiquement.</p></div></div><form id="record-form" class="record-form reveal-delay"><section class="panel form-section"><div class="section-title"><span>01</span><div><h2>Informations de l'enfant</h2><p>Identité et naissance</p></div></div><div class="form-grid"><label>Nom de l'enfant<input name="nomEnfant" required placeholder="Ex. KOUASSI"></label><label>Prénom de l'enfant<input name="prenomEnfant" required placeholder="Ex. Amara"></label><label>Sexe<select name="sexe" required><option value="">Sélectionner</option><option value="Fille">Fille</option><option value="Garçon">Garçon</option></select></label><label>Date de naissance<input name="dateNaissance" type="date" required></label><label class="full">Lieu de naissance<input name="lieuNaissance" required placeholder="Ex. Mairie centrale"></label></div></section><section class="panel form-section"><div class="section-title"><span>02</span><div><h2>Informations des parents</h2><p>Filiation déclarée</p></div></div><div class="form-grid"><label>Nom complet du père<input name="nomPere" required placeholder="Nom et prénom du père"></label><label>Nom complet de la mère<input name="nomMere" required placeholder="Nom et prénom de la mère"></label></div></section><div class="form-actions"><button type="button" class="button button-ghost" data-view="records">Annuler</button><button type="submit" class="button button-primary"><span>✓</span> Enregistrer le dossier</button></div></form></template>
+        </div>
+      </section>
+    </template>
 
-  <template id="users-template"><div class="page-head reveal"><div><p class="eyebrow">Administration</p><h1>Utilisateurs</h1><p class="muted">Gérez les agents autorisés à accéder au registre.</p></div><button class="button button-primary" data-action="new-user"><span>＋</span> Ajouter un utilisateur</button></div><section class="panel records-panel reveal-delay"><div class="panel-head"><div><h2>Comptes habilités</h2><p class="muted">Les mots de passe ne sont jamais affichés.</p></div></div><div class="table-scroll"><table><thead><tr><th>Utilisateur</th><th>Email</th><th>Rôle</th><th>Créé le</th><th>Actions</th></tr></thead><tbody id="users-body"></tbody></table></div></section></template>
-  <div id="user-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="user-modal-title"><div class="modal-card"><button class="modal-close" data-action="close-user-modal" aria-label="Fermer">×</button><div class="modal-kicker"><span class="modal-icon">♙</span><div><p class="eyebrow">Administration</p><h2 id="user-modal-title">Ajouter un utilisateur</h2></div></div><p class="modal-description">Créez un accès sécurisé pour un agent du registre.</p><form id="user-form" class="form-stack"><div class="form-grid"><label>Nom complet<input name="nom" required placeholder="Ex. Aïcha Diarra"></label><label>Email professionnel<input name="email" type="email" required placeholder="nom@commune.fr"></label><label>Rôle<select name="role"><option value="agent">Agent habilité</option><option value="admin">Administrateur</option></select></label><label>Mot de passe<input name="motDePasse" type="password" minlength="6" required placeholder="6 caractères minimum"></label></div><div class="modal-actions"><button type="button" class="button button-ghost" data-action="close-user-modal">Annuler</button><button type="submit" class="button button-primary"><span>✓</span> Créer l'accès</button></div></form></div></div>
-  <div id="help-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="help-modal-title"><div class="modal-card help-modal-card"><button class="modal-close" data-action="close-help" aria-label="Fermer">×</button><div class="modal-kicker"><span class="modal-icon">?</span><div><p class="eyebrow">Centre d'aide</p><h2 id="help-modal-title">Guide agent</h2></div></div><p class="modal-description">Les repères essentiels pour travailler sereinement dans Natalis.</p><div class="help-guide"><article><span>01</span><div><strong>Enregistrer une naissance</strong><p>Ouvrez « Nouvel enregistrement », renseignez l'enfant et ses parents, puis validez. Le numéro d'acte est généré automatiquement.</p></div></article><article><span>02</span><div><strong>Retrouver un dossier</strong><p>Utilisez le registre et sa recherche par nom, parent, lieu ou numéro d'acte. Les résultats sont paginés.</p></div></article><article><span>03</span><div><strong>Comprendre les droits</strong><p>Un agent peut consulter et créer. Seul un administrateur peut modifier, supprimer ou gérer les utilisateurs.</p></div></article></div><div class="help-contact"><span>✉</span><div><strong>Une question reste ouverte ?</strong><small>Contactez l'administrateur de votre commune.</small></div></div></div></div>
+  <template id="form-template">
+    <div class="page-head reveal">
+      <div>
+        <p class="eyebrow">Registre communal / Nouveau dossier</p>
+        <h1 id="form-title">Enregistrer une naissance</h1>
+        <p class="muted">Saisissez les informations avec soin. Le numéro d'acte sera généré automatiquement.</p>
+      </div>
+    </div>
+    <form id="record-form" class="record-form reveal-delay">
+      <section class="panel form-section">
+        <div class="section-title">
+          <span>01</span>
+          <div>
+            <h2>Informations de l'enfant</h2>
+            <p>Identité et naissance</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>Nom de l'enfant<input name="nomEnfant" required placeholder="Ex. AHANDA"></label>
+          <label>Prénom de l'enfant<input name="prenomEnfant" required placeholder="Ex. Thierry"></label>
+          <label>Sexe<select name="sexe" required>
+            <option value="">Sélectionner</option>
+            <option value="Fille">Fille</option>
+            <option value="Garçon">Garçon</option>
+          </select>
+        </label>
+        <label>Date de naissance<input name="dateNaissance" type="date" required></label>
+        <label class="full">Lieu de naissance<input name="lieuNaissance" required placeholder="Ex. Mairie centrale"></label>
+      </div>
+    </section>
+    
+    <section class="panel form-section">
+      <div class="section-title">
+        <span>02</span>
+        <div>
+          <h2>Informations des parents</h2>
+          <p>Filiation déclarée</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        <label>Nom complet du père<input name="nomPere" required placeholder="Nom et prénom du père"></label>
+        <label>Nom complet de la mère<input name="nomMere" required placeholder="Nom et prénom de la mère"></label>
+      </div>
+    </section>
+    <div class="form-actions">
+      <button type="button" class="button button-ghost" data-view="records">Annuler</button>
+      <button type="submit" class="button button-primary">
+        <span>✓</span> Enregistrer le dossier</button>
+      </div>
+    </form>
+  </template>
+
+  <template id="users-template">
+    <div class="page-head reveal">
+      <div>
+        <p class="eyebrow">Administration</p>
+        <h1>Utilisateurs</h1>
+        <p class="muted">Gérez les agents autorisés à accéder au registre.</p>
+      </div>
+      <button class="button button-primary" data-action="new-user">
+        <span>＋</span> Ajouter un utilisateur</button>
+      </div>
+      <section class="panel records-panel reveal-delay">
+        <div class="panel-head">
+          <div>
+            <h2>Comptes habilités</h2>
+            <p class="muted">Les mots de passe ne sont jamais affichés.</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Utilisateur</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Créé le</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </template>
+  <div id="user-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+    <div class="modal-card">
+      <button class="modal-close" data-action="close-user-modal" aria-label="Fermer">×</button>
+      <div class="modal-kicker">
+        <span class="modal-icon">♙</span>
+        <div>
+          <p class="eyebrow">Administration</p>
+          <h2 id="user-modal-title">Ajouter un utilisateur</h2>
+        </div>
+      </div>
+      <p class="modal-description">Créez un accès sécurisé pour un agent du registre.</p>
+      <form id="user-form" class="form-stack">
+        <div class="form-grid">
+          <label>Nom complet<input name="nom" required placeholder="Ex. Aïcha Diarra"></label>
+          <label>Email professionnel<input name="email" type="email" required placeholder="nom@commune.fr"></label>
+          <label>Rôle<select name="role">
+            <option value="agent">Agent habilité</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </label><label>Mot de passe<input name="motDePasse" type="password" minlength="6" required placeholder="6 caractères minimum"></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="button button-ghost" data-action="close-user-modal">Annuler</button>
+        <button type="submit" class="button button-primary">
+          <span>✓</span> Créer l'accès</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="help-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+    <div class="modal-card help-modal-card">
+      <button class="modal-close" data-action="close-help" aria-label="Fermer">×</button>
+      <div class="modal-kicker">
+        <span class="modal-icon">?</span>
+        <div>
+          <p class="eyebrow">Centre d'aide</p>
+          <h2 id="help-modal-title">Guide agent</h2>
+        </div>
+      </div>
+      <p class="modal-description">Les repères essentiels pour travailler sereinement dans Natalis.</p>
+      <div class="help-guide">
+        <article>
+          <span>01</span>
+          <div>
+            <strong>Enregistrer une naissance</strong>
+            <p>Ouvrez « Nouvel enregistrement », renseignez l'enfant et ses parents, puis validez. Le numéro d'acte est généré automatiquement.</p>
+          </div>
+        </article>
+        <article>
+          <span>02</span>
+          <div>
+            <strong>Retrouver un dossier</strong>
+            <p>Utilisez le registre et sa recherche par nom, parent, lieu ou numéro d'acte. Les résultats sont paginés.</p>
+          </div>
+        </article>
+        <article>
+          <span>03</span>
+          <div>
+            <strong>Comprendre les droits</strong>
+            <p>Un agent peut consulter et créer. Seul un administrateur peut modifier, supprimer ou gérer les utilisateurs.</p>
+          </div>
+        </article>
+      </div>
+      <div class="help-contact">
+        <span>✉</span>
+        <div>
+          <strong>Une question reste ouverte ?</strong><small>Contactez l'administrateur de votre commune.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

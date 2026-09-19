@@ -210,11 +210,36 @@ async function deleteUser(id) {
 async function exportRecords() {
   try {
     const data = await api('/naissances?limit=10000&page=1');
-    const headers = ['Numero acte', 'Nom', 'Prenom', 'Sexe', 'Date naissance', 'Lieu', 'Pere', 'Mere'];
-    const rows = data.naissances.map(item => [item.numeroActe, item.nomEnfant, item.prenomEnfant, item.sexe, item.dateNaissance, item.lieuNaissance, item.nomPere, item.nomMere]);
-    const csv = [headers, ...rows].map(row => row.map(value => `"${String(value || '').replace(/"/g, '""')}"`).join(';')).join('\n');
-    const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); link.download = 'registre-naissances.csv'; link.click(); URL.revokeObjectURL(link.href);
-    showToast('Export téléchargé.');
+    const jsPDF = window.jspdf?.jsPDF;
+    if (!jsPDF) throw new Error('Le module PDF est indisponible. Rechargez la page puis réessayez.');
+
+    const documentPdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    documentPdf.setFontSize(18);
+    documentPdf.text('Registre des naissances', 14, 16);
+    documentPdf.setFontSize(9);
+    documentPdf.setTextColor(100);
+    documentPdf.text(`Export du ${new Date().toLocaleDateString('fr-FR')} - ${data.total} acte(s)`, 14, 23);
+
+    documentPdf.autoTable({
+      startY: 30,
+      head: [['Numero acte', 'Enfant', 'Sexe', 'Date naissance', 'Lieu', 'Pere', 'Mere']],
+      body: data.naissances.map(item => [
+        item.numeroActe,
+        `${item.nomEnfant} ${item.prenomEnfant}`,
+        item.sexe,
+        formatDate(item.dateNaissance),
+        item.lieuNaissance,
+        item.nomPere,
+        item.nomMere
+      ]),
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [18, 60, 58] },
+      alternateRowStyles: { fillColor: [240, 246, 244] },
+      margin: { left: 14, right: 14 }
+    });
+
+    documentPdf.save('registre-naissances.pdf');
+    showToast('Registre PDF téléchargé.');
   } catch (error) { showError(error); }
 }
 
