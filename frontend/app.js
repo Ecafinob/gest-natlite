@@ -12,11 +12,14 @@ const state = {
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+// Vercel expose l'API sous /api, alors que le serveur Express local utilise directement /.
+const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '' : '/api';
+
 // Wrapper HTTP: ajoute automatiquement le JWT et transforme les erreurs API en exceptions.
 const api = async (path, options = {}) => {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
-  const response = await fetch(path, { ...options, headers });
+  const response = await fetch(`${apiBase}${path}`, { ...options, headers });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.message || 'Une erreur est survenue.');
   return data;
