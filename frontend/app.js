@@ -21,7 +21,10 @@ const api = async (path, options = {}) => {
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
   const response = await fetch(`${apiBase}${path}`, { ...options, headers });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.message || 'Une erreur est survenue.');
+  if (!response.ok) {
+    console.error('Erreur API:', response.status, response.url, data);
+    throw new Error(data.message || `Erreur ${response.status} lors de l'appel API.`);
+  }
   return data;
 };
 
