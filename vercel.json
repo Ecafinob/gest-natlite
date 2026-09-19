@@ -10,6 +10,6 @@
     { "source": "/naissances/:path*", "destination": "/api/naissances/:path*" },
     { "source": "/utilisateurs/:path*", "destination": "/api/utilisateurs/:path*" },
     { "source": "/", "destination": "/frontend/index.html" },
-    { "source": "/:path*", "destination": "/frontend/:path*" }
+    { "source": "/((?!api(?:/|$)).*)", "destination": "/frontend/$1" }
   ]
 }
