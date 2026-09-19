@@ -187,7 +187,8 @@ function closeHelp() {
 
 async function submitUser(event) {
   event.preventDefault();
-  const form = event.currentTarget;
+  // L'ecouteur est place sur document: currentTarget vaut document, target vaut le formulaire.
+  const form = event.target;
   const submitButton = form.querySelector('button[type="submit"]');
   submitButton.disabled = true;
   try {
