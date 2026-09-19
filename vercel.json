@@ -6,10 +6,9 @@
     }
   },
   "rewrites": [
-    { "source": "/auth/:path*", "destination": "/api/auth/:path*" },
-    { "source": "/naissances/:path*", "destination": "/api/naissances/:path*" },
-    { "source": "/utilisateurs/:path*", "destination": "/api/utilisateurs/:path*" },
     { "source": "/", "destination": "/frontend/index.html" },
-    { "source": "/((?!api(?:/|$)).*)", "destination": "/frontend/$1" }
+    { "source": "/app.js", "destination": "/frontend/app.js" },
+    { "source": "/styles.css", "destination": "/frontend/styles.css" },
+    { "source": "/favicon.svg", "destination": "/frontend/favicon.svg" }
   ]
 }
