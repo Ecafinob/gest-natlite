@@ -1,21 +1,22 @@
 const Naissance = require("../models/Naissance");
 
-//enregistrer la naissance
+// Le service isole les acces MongoDB des controllers HTTP.
 const creerNaissance = async (donnees) => {
     const naissance = new Naissance(donnees);
 
     return await naissance.save();
 };
-//obetenir toute les naissnces
 const obtenirToutesLesNaissances = async (
     page = 1,
     limit = 10,
     recherche = ""
 ) =>{
+    // La pagination evite de charger tous les actes en memoire.
     const skip = (page - 1) * limit;
 
     const filtre = {};
    
+    // Une recherche est appliquee aux champs utiles du registre.
     if (recherche) {
         filtre.$or = [ 
         {nomEnfant: {$regex: recherche, $options: "i"} },
@@ -69,6 +70,7 @@ const rechercherParNumeroActe = async (numeroActe) =>{
 };
 
 const obtenirStatistiques = async () => {
+    // Les aggregations sont executees en parallele pour le tableau de bord.
     const [total, parSexe, parLieu] = await Promise.all([
         Naissance.countDocuments(),
         Naissance.aggregate([

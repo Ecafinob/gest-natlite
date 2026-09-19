@@ -8,17 +8,19 @@ const utilisateurRoutes = require("./routes/utilisateurRoutes");
 
 const app = express();
 
+// Autorise les appels depuis le frontend et parse les corps JSON.
 app.use(cors());
 app.use(express.json());
+
+// En local, Express sert directement les fichiers de l'interface.
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// Routes des naissances
+// Chaque routeur regroupe les endpoints d'un domaine fonctionnel.
 app.use("/naissances", naissanceRoutes);
-//Routes des authentifications
 app.use("/auth/", authRoutes);
-//route des utilisateurs
 app.use("/utilisateurs", utilisateurRoutes);
 
+// Point de contrôle simple pour verifier que l'API est disponible.
 app.get("/", (req, res) => {
     res.json({
         message: "API Gestion de la Natalité opérationnelle"

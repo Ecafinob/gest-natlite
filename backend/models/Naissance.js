@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Schema d'un acte de naissance; numeroActe est genere par le controller.
 const naissanceSchema = new mongoose.Schema(
     {
         nomEnfant:{

@@ -7,6 +7,7 @@ let databaseConnection;
 
 module.exports = async (req, res) => {
     try {
+        // La promesse est partagee entre les invocations chaudes de la fonction serverless.
         databaseConnection ||= connectDB();
         await databaseConnection;
 

@@ -2,6 +2,7 @@ const naissanceService = require("../services/naissanceService");
 const generateNumeroActe = require("../utils/generateNumeroActe");
 const mongoose = require("mongoose");
 
+// Le numero d'acte est genere cote serveur pour ne pas dependre d'une saisie client.
 const creerNaissance = async (req, res) =>{
     try{
         const donnees = {
@@ -41,6 +42,7 @@ const creerNaissance = async (req, res) =>{
 //Récupérer toutes les naissances
 const obtenirToutesLesNaissances = async (req, res) =>{
     try{
+    // Les valeurs par defaut permettent au frontend de demander une liste simple.
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
       const recherche = req.query.recherche || "" ;
@@ -185,6 +187,7 @@ const rechercherParNumeroActe = async (req, res) => {
 
 const obtenirStatistiques = async (req, res) => {
     try {
+        // Le service prepare les donnees affichees par les indicateurs du dashboard.
         const statistiques = await naissanceService.obtenirStatistiques();
         res.status(200).json(statistiques);
     } catch (error) {

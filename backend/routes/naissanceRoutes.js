@@ -12,6 +12,7 @@ const {creerNaissance,
 } = require("../controllers/naissanceController");
 const autoriserRole = require("../middleware/roleMiddleware");
 
+// Tous les endpoints d'actes exigent un JWT valide.
 //POST-enregistrer une naissance
 router.post("/", authentifierUtilisateur, autoriserRole("admin", "agent"), creerNaissance);
 
@@ -26,7 +27,7 @@ router.get("/numero-acte/:numeroActe", authentifierUtilisateur, rechercherParNum
 //GET- une naissance par id (route de consultation)
 router.get("/:id", authentifierUtilisateur, obtenirNaissanceParId);
 
-//PUT- Modifier la naissance
+// Seul un administrateur peut modifier ou supprimer un acte existant.
 router.put("/:id", authentifierUtilisateur, autoriserRole("admin"), modifierNaissance);
 
 //DELETE- supprimer la naissance

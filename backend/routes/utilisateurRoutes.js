@@ -13,6 +13,7 @@ const {
     supprimerUtilisateur
 } = require("../controllers/utilisateurController");
 
+// Toutes les operations de gestion des comptes sont reservees aux administrateurs.
 // POST - Créer un utilisateur
 // Seul l'administrateur peut créer un utilisateur
 router.post(

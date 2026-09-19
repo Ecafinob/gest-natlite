@@ -7,6 +7,7 @@ const {
 
 const router = express.Router();
 
+// Ces routes sont publiques: elles creent un compte ou ouvrent une session.
 // POST - Inscription
 router.post("/register", register);
 

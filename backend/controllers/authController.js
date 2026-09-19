@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Utilisateur = require("../models/Utilisateur");
 
-// Inscription
+// Les controllers valident la requete puis traduisent le resultat metier en HTTP.
 const register = async (req, res) => {
     try {
         const { nom, motDePasse } = req.body;
@@ -24,7 +24,7 @@ const register = async (req, res) => {
             });
         }
 
-        // Hacher le mot de passe
+        // Le mot de passe en clair ne doit jamais etre persiste.
         const motDePasseHash = await bcrypt.hash(motDePasse, 10);
 
         // Créer l'utilisateur
@@ -54,7 +54,6 @@ const register = async (req, res) => {
 };
 
 
-// Connexion
 const login = async (req, res) => {
     try {
         const emailNormalise = req.body.email?.trim().toLowerCase();
@@ -76,7 +75,7 @@ const login = async (req, res) => {
             });
         }
 
-        // Comparer le mot de passe
+        // bcrypt compare le mot de passe fourni avec le hash stocke.
         const motDePasseCorrect = await bcrypt.compare(
             motDePasse,
             utilisateur.motDePasse
@@ -88,7 +87,7 @@ const login = async (req, res) => {
             });
         }
 
-        // Générer le token JWT
+        // Le token transporte uniquement l'identite et le role utiles aux middlewares.
         const token = jwt.sign(
             {
                 id: utilisateur._id,

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const authentifierUtilisateur = (req, res, next) => {
     try {
+        // Le frontend envoie les tokens sous la forme: Authorization: Bearer <token>.
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
@@ -10,7 +11,7 @@ const authentifierUtilisateur = (req, res, next) => {
             });
         }
 
-       const [type, token] = authHeader.split(" ");
+        const [type, token] = authHeader.split(" ");
 
         if (type !== "Bearer" || !token) {
             return res.status(401).json({
@@ -18,11 +19,11 @@ const authentifierUtilisateur = (req, res, next) => {
             });
         }
 
+        // Le payload decode est conserve pour les controles de role et les controllers.
         const utilisateur = jwt.verify(
             token,
             process.env.JWT_SECRET?.trim()
         );
-        console.log("utilisateur authentifié:", utilisateur)
         req.utilisateur = utilisateur;
         next();
         

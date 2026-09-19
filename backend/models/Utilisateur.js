@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Schema des comptes applicatifs. Le mot de passe est toujours stocke sous forme de hash.
 const utilisateurSchema = new mongoose.Schema(
     {
         nom: {

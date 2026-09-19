@@ -1,3 +1,4 @@
+// Etat partage de l'interface, restaure depuis le stockage du navigateur au chargement.
 const state = {
   token: localStorage.getItem('natalis_token'),
   user: JSON.parse(localStorage.getItem('natalis_user') || 'null'),
@@ -10,6 +11,8 @@ const state = {
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+// Wrapper HTTP: ajoute automatiquement le JWT et transforme les erreurs API en exceptions.
 const api = async (path, options = {}) => {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
@@ -24,6 +27,7 @@ const formatDate = value => value ? new Intl.DateTimeFormat('fr-FR', { day: '2-d
 const showToast = message => { const toast = $('#toast'); toast.textContent = message; toast.classList.add('visible'); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove('visible'), 3500); };
 const showError = error => { if (error.message.includes('Token') || error.message.includes('authentification')) logout(); else showToast(error.message); };
 
+// La session est conservee pour permettre de recharger la page sans se reconnecter.
 function setSession(data) {
   state.token = data.token;
   state.user = data.utilisateur;
@@ -57,6 +61,7 @@ function openApp() {
 }
 
 function renderView(view) {
+  // Les templates HTML sont clones dans le conteneur, puis la vue charge ses donnees.
   if (view === 'users' && state.user?.role !== 'admin') return renderView('dashboard');
   state.view = view;
   const template = document.getElementById(`${view === 'new-record' ? 'form' : view}-template`);
@@ -74,6 +79,7 @@ function renderView(view) {
 
 async function loadDashboard() {
   try {
+    // Les statistiques et les actes recents sont independants et charges en parallele.
     const [stats, records] = await Promise.all([api('/naissances/statistiques'), api('/naissances?limit=5&page=1')]);
     const girls = stats.parSexe.find(item => /fille|féminin/i.test(item._id))?.total || 0;
     const boys = stats.parSexe.find(item => /garçon|garcon|masculin/i.test(item._id))?.total || 0;
@@ -101,6 +107,7 @@ const emptyRow = (columns, text) => `<tr><td colspan="${columns}" class="empty-s
 
 async function loadRecords(page = 1) {
   try {
+    // La recherche est encodee avant d'etre envoyee dans la query string.
     const search = $('#record-search')?.value.trim() || '';
     const data = await api(`/naissances?page=${page}&limit=10&recherche=${encodeURIComponent(search)}`);
     state.records = data.naissances;
@@ -125,6 +132,7 @@ function setupRecordForm() {
   }
   form.addEventListener('submit', async event => {
     event.preventDefault();
+    // Le meme formulaire sert a la creation et a la modification selon editingId.
     const payload = Object.fromEntries(new FormData(form).entries());
     try {
       const method = state.editingId ? 'PUT' : 'POST';
@@ -204,6 +212,7 @@ async function exportRecords() {
   } catch (error) { showError(error); }
 }
 
+// Delegation d'evenements: les boutons des templates dynamiques restent fonctionnels.
 document.addEventListener('click', event => {
   const viewButton = event.target.closest('[data-view]');
   if (viewButton) { state.editingId = null; renderView(viewButton.dataset.view); $('#app-screen .sidebar')?.classList.remove('open'); return; }
